@@ -4,9 +4,10 @@ namespace eCommerce.ProductsService.Application.RepositoryContracts;
 
 public interface IProductsRepository
 {
-    Task<IEnumerable<Product>> GetProducts();
-    Task<IEnumerable<Product>> GetBySearchString(string searchString);
-    Task<Product?> AddProduct(Product product);
-    Task<Product?> UpdateProduct(Product product);
-    Task<bool> DeleteProduct(Guid id);
+    Task<IEnumerable<Product>> GetProductsAsync();
+    Task<Product?> GetByIdAsync(Guid id);
+    Task<IEnumerable<Product>> GetBySearchStringAsync(string searchString);
+    Task<Product?> AddProductAsync(Product product);
+    Task<Product?> UpdateProductAsync(Product product);
+    Task<bool> DeleteProductAsync(Guid id);
 }

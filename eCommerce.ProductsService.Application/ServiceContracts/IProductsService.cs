@@ -5,9 +5,10 @@ namespace eCommerce.ProductsService.Application.ServiceContracts;
 
 public interface IProductsService
 {
-    Task<Result<List<ProductDto>>> GetProducts();
-    Task<Result<List<ProductDto>>> GetBySearchString(string searchString);
-    Task<Result<ProductDto>> AddProduct(AddProductDto product);
-    Task<Result<ProductDto>> UpdateProduct(UpdateProductDto product);
-    Task<Result> DeleteProduct(Guid id);
+    Task<Result<List<ProductDto>>> GetProductsAsync();
+    Task<Result<List<ProductDto>>> GetBySearchStringAsync(string searchString);
+    Task<Result<ProductDto>> GetByIdAsync(Guid productId);
+    Task<Result<ProductDto>> AddProductAsync(AddProductDto product);
+    Task<Result<ProductDto>> UpdateProductAsync(UpdateProductDto product);
+    Task<Result> DeleteProductAsync(Guid id);
 }
