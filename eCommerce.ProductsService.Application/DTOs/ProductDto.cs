@@ -7,6 +7,6 @@ namespace eCommerce.ProductsService.Application.DTOs;
 public record ProductDto(
     Guid Id,
     string Name,
-    string Category,
+    CategoryOptions Category,
     double UnitPrice,
     int QuantityInStock);

@@ -8,7 +8,8 @@ public class AddProductDtoValidator : AbstractValidator<AddProductDto>
     public AddProductDtoValidator()
     {
         RuleFor(p => p.Name)
-            .NotEmpty();
+            .NotEmpty()
+            .MaximumLength(50);
 
         RuleFor(p => p.Category)
             .IsInEnum();

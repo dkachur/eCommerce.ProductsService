@@ -20,7 +20,7 @@ public class MapsterConfig : IRegister
             .MapWith(src => new ProductDto(
                 src.Id,
                 src.Name,
-                src.Category,
+                Enum.Parse<CategoryOptions>(src.Category, true),
                 src.UnitPrice,
                 src.QuantityInStock));
 

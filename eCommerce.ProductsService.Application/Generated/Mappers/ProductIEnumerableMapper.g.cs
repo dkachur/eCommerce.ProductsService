@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using eCommerce.ProductsService.Application.DTOs;
+using eCommerce.ProductsService.Application.Enums;
 using eCommerce.ProductsService.Domain.Entities;
 
 namespace System.Collections.Generic
@@ -19,7 +21,7 @@ namespace System.Collections.Generic
             while (enumerator.MoveNext())
             {
                 Product item = enumerator.Current;
-                result.Add(new ProductDto(item.Id, item.Name, item.Category, item.UnitPrice, item.QuantityInStock));
+                result.Add(new ProductDto(item.Id, item.Name, Enum.Parse<CategoryOptions>(item.Category, true), item.UnitPrice, item.QuantityInStock));
             }
             return result;
             

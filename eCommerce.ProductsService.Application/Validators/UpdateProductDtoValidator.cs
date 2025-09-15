@@ -7,8 +7,12 @@ public class UpdateProductDtoValidator : AbstractValidator<UpdateProductDto>
 {
     public UpdateProductDtoValidator()
     {
-        RuleFor(p => p.Name)
+        RuleFor(p => p.Id)
             .NotEmpty();
+
+        RuleFor(p => p.Name)
+            .NotEmpty()
+            .MaximumLength(50);
 
         RuleFor(p => p.Category)
             .IsInEnum();

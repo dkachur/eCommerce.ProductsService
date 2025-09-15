@@ -2,4 +2,8 @@
 
 namespace eCommerce.ProductsService.Application.Errors;
 
-public class ValidationError(string message) : Error(message) { }
+public class ValidationError(string message, string propertyName) : Error(message) 
+{
+    public string PropertyName => _propertyName;
+    private readonly string _propertyName = propertyName;
+}
