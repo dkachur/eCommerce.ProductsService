@@ -2,6 +2,9 @@
 
 namespace eCommerce.ProductsService.API.Middlewares;
 
+/// <summary>
+/// The exception handling middleware that handles all unhandled expections.
+/// </summary>
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -13,6 +16,9 @@ public class ExceptionHandlingMiddleware
         _logger = logger;
     }
 
+    /// <summary>
+    /// Logs all unhandled exceptions and creates response with exception message as detail of the <see cref="ProblemDetails"/> and status code HTTP 500.
+    /// </summary>
     public async Task Invoke(HttpContext httpContext)
     {
         try

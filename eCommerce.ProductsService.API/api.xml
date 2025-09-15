@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>eCommerce.ProductsService.API</name>
+    </assembly>
+    <members>
+        <member name="T:eCommerce.ProductsService.API.DTOs.AddProductRequest">
+            <summary>
+            Data transfer object for binding the request to add a new product.
+            </summary>
+            <param name="Name">The name of the product.</param>
+            <param name="Category">The category name as string. Will be converted to <see cref="T:eCommerce.ProductsService.Application.Enums.CategoryOptions"/>.</param>
+            <param name="UnitPrice">The price of a single product unit.</param>
+            <param name="QuantityInStock">The number of items available in stock.</param>
+        </member>
+        <member name="M:eCommerce.ProductsService.API.DTOs.AddProductRequest.#ctor(System.String,System.String,System.Double,System.Int32)">
+            <summary>
+            Data transfer object for binding the request to add a new product.
+            </summary>
+            <param name="Name">The name of the product.</param>
+            <param name="Category">The category name as string. Will be converted to <see cref="T:eCommerce.ProductsService.Application.Enums.CategoryOptions"/>.</param>
+            <param name="UnitPrice">The price of a single product unit.</param>
+            <param name="QuantityInStock">The number of items available in stock.</param>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.AddProductRequest.Name">
+            <summary>The name of the product.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.AddProductRequest.Category">
+            <summary>The category name as string. Will be converted to <see cref="T:eCommerce.ProductsService.Application.Enums.CategoryOptions"/>.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.AddProductRequest.UnitPrice">
+            <summary>The price of a single product unit.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.AddProductRequest.QuantityInStock">
+            <summary>The number of items available in stock.</summary>
+        </member>
+        <member name="T:eCommerce.ProductsService.API.DTOs.ProductResponse">
+            <summary>
+            Data transfer object that represents the response product information.
+            </summary>
+            <param name="Id">The unique identifier of the product.</param>
+            <param name="Name">The name of the product.</param>
+            <param name="Category">The category of the product.</param>
+            <param name="UnitPrice">The price of a single product unit.</param>
+            <param name="QuantityInStock">The number of items available in stock.</param>
+        </member>
+        <member name="M:eCommerce.ProductsService.API.DTOs.ProductResponse.#ctor(System.Guid,System.String,eCommerce.ProductsService.Application.Enums.CategoryOptions,System.Double,System.Int32)">
+            <summary>
+            Data transfer object that represents the response product information.
+            </summary>
+            <param name="Id">The unique identifier of the product.</param>
+            <param name="Name">The name of the product.</param>
+            <param name="Category">The category of the product.</param>
+            <param name="UnitPrice">The price of a single product unit.</param>
+            <param name="QuantityInStock">The number of items available in stock.</param>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.ProductResponse.Id">
+            <summary>The unique identifier of the product.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.ProductResponse.Name">
+            <summary>The name of the product.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.ProductResponse.Category">
+            <summary>The category of the product.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.ProductResponse.UnitPrice">
+            <summary>The price of a single product unit.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.ProductResponse.QuantityInStock">
+            <summary>The number of items available in stock.</summary>
+        </member>
+        <member name="T:eCommerce.ProductsService.API.DTOs.UpdateProductRequest">
+            <summary>
+            Data transfer object for binding the request to update an existing product.
+            </summary>
+            <param name="Id">The unique identifier of the product.</param>
+            <param name="Name">The name of the product.</param>
+            <param name="Category">The category name as string. Will be converted to <see cref="T:eCommerce.ProductsService.Application.Enums.CategoryOptions"/>.</param>
+            <param name="UnitPrice">The price of a single product unit.</param>
+            <param name="QuantityInStock">The number of items available in stock.</param>
+        </member>
+        <member name="M:eCommerce.ProductsService.API.DTOs.UpdateProductRequest.#ctor(System.Guid,System.String,System.String,System.Double,System.Int32)">
+            <summary>
+            Data transfer object for binding the request to update an existing product.
+            </summary>
+            <param name="Id">The unique identifier of the product.</param>
+            <param name="Name">The name of the product.</param>
+            <param name="Category">The category name as string. Will be converted to <see cref="T:eCommerce.ProductsService.Application.Enums.CategoryOptions"/>.</param>
+            <param name="UnitPrice">The price of a single product unit.</param>
+            <param name="QuantityInStock">The number of items available in stock.</param>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.UpdateProductRequest.Id">
+            <summary>The unique identifier of the product.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.UpdateProductRequest.Name">
+            <summary>The name of the product.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.UpdateProductRequest.Category">
+            <summary>The category name as string. Will be converted to <see cref="T:eCommerce.ProductsService.Application.Enums.CategoryOptions"/>.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.UpdateProductRequest.UnitPrice">
+            <summary>The price of a single product unit.</summary>
+        </member>
+        <member name="P:eCommerce.ProductsService.API.DTOs.UpdateProductRequest.QuantityInStock">
+            <summary>The number of items available in stock.</summary>
+        </member>
+        <member name="T:eCommerce.ProductsService.API.Exntensions.ProductEndpointsExrtension">
+            <summary>
+            A static class for product endpoints extensions.
+            </summary>
+        </member>
+        <member name="M:eCommerce.ProductsService.API.Exntensions.ProductEndpointsExrtension.MapProductEndpoints(Microsoft.AspNetCore.Routing.IEndpointRouteBuilder)">
+            <summary>
+            Maps all product-related endpoints (GET, POST, PUT, DELETE) to specified routes.
+            </summary>
+            <param name="app">The endpoint route builder of the application.</param>
+            <returns>The <see cref="T:Microsoft.AspNetCore.Routing.IEndpointRouteBuilder"/> for chaining calls.</returns>
+        </member>
+        <member name="M:eCommerce.ProductsService.API.Helpers.EnumHelper.GetOptionsString``1(System.String)">
+            <summary>
+            Creates a human readable string that lists all names from the specified Enum separated by commas,
+            with the last element separated by <paramref name="lastSeparator"/>.
+            </summary>
+            <typeparam name="TEnum">The Enum type which names to list.</typeparam>
+            <param name="lastSeparator">The last separator for the string. Default value is "or".</param>
+            <returns>The created string.</returns>
+        </member>
+        <member name="T:eCommerce.ProductsService.API.Middlewares.ExceptionHandlingMiddleware">
+            <summary>
+            The exception handling middleware that handles all unhandled expections.
+            </summary>
+        </member>
+        <member name="M:eCommerce.ProductsService.API.Middlewares.ExceptionHandlingMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Logs all unhandled exceptions and creates response with exception message as detail of the <see cref="T:Microsoft.AspNetCore.Mvc.ProblemDetails"/> and status code HTTP 500.
+            </summary>
+        </member>
+    </members>
+</doc>
