@@ -13,7 +13,7 @@ public interface IProductsService
     /// </summary>
     /// <returns>
     /// A result containing a list of <see cref="ProductDto"/> if retrieving is successful;
-    /// otherise, a result containing an error.
+    /// otherwise, a result containing an error.
     /// </returns>
     Task<Result<List<ProductDto>>> GetProductsAsync();
 
@@ -23,7 +23,7 @@ public interface IProductsService
     /// <param name="searchString">The search value.</param>
     /// <returns>
     /// A result containing a list of <see cref="ProductDto"/> that contain <paramref name="searchString"/> if search is successful;
-    /// otherise, a result containing an error.
+    /// otherwise, a result containing an error.
     /// </returns>
     Task<Result<List<ProductDto>>> GetBySearchStringAsync(string searchString);
 
@@ -33,7 +33,7 @@ public interface IProductsService
     /// <param name="productId">The unique identifier of the product.</param>
     /// <returns>
     /// A result containing a <see cref="ProductDto"/> with specified ID if retrieving is successful;
-    /// otherise, a result containing an error.
+    /// otherwise, a result containing an error.
     /// </returns>
     Task<Result<ProductDto>> GetByIdAsync(Guid productId);
 
@@ -62,7 +62,7 @@ public interface IProductsService
     /// </summary>
     /// <param name="id">The unique identifier of the product to delete.</param>
     /// <returns>
-    /// A result with successful status if adding is successful;
+    /// A result with successful status if deletion is successful;
     /// otherwise, a result containing an error.
     /// </returns>
     Task<Result> DeleteProductAsync(Guid id);
