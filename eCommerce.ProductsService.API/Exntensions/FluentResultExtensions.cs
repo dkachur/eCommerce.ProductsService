@@ -33,10 +33,10 @@ public static class FluentResultExtensions
         => fluentResult.ToApiResult(Results.Ok);
 
     public static IResult ToCreatedProductApiResult(this Result<ProductDto> fluentResult, string baseLocation)
-    => fluentResult.ToApiResult(r => {
-        string location = $"{baseLocation}{fluentResult.Value.Id}";
-        return Results.Created(location, r);
-    });
+        => fluentResult.ToApiResult(r => {
+            string location = $"{baseLocation}{fluentResult.Value.Id}";
+            return Results.Created(location, r);
+        });
 
     private static IResult ToErrorResult(this Result fluentResult)
     {
