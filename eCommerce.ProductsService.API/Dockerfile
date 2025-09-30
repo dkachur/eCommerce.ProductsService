@@ -12,19 +12,24 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["eCommerce.API/eCommerce.API.csproj", "eCommerce.API/"]
-RUN dotnet restore "./eCommerce.API/eCommerce.API.csproj"
+COPY ["eCommerce.ProductsService.API/eCommerce.ProductsService.API.csproj", "eCommerce.ProductsService.API/"]
+RUN dotnet restore "./eCommerce.ProductsService.API/eCommerce.ProductsService.API.csproj"
 COPY . .
-WORKDIR "/src/eCommerce.API"
-RUN dotnet build "./eCommerce.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/eCommerce.ProductsService.API"
+RUN dotnet build "./eCommerce.ProductsService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./eCommerce.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./eCommerce.ProductsService.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "eCommerce.API.dll"]
+ENV MYSQL_HOST=localhost
+ENV MYSQL_PORT=3306
+ENV MYSQL_DB=ecommerceproducts
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=admin
+ENTRYPOINT ["dotnet", "eCommerce.ProductsService.API.dll"]
