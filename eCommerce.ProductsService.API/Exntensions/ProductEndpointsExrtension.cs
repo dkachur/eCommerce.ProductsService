@@ -2,7 +2,6 @@
 using eCommerce.ProductsService.Application.ServiceContracts;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace eCommerce.ProductsService.API.Exntensions;
 

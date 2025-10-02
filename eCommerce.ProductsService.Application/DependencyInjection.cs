@@ -10,7 +10,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        //TODO : Add services
         services.AddScoped<IProductsService, Services.ProductsService>();
         services.AddValidatorsFromAssemblyContaining<AddProductDtoValidator>();
         ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en-US");
