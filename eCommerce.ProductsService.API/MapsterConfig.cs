@@ -26,5 +26,12 @@ public class MapsterConfig : IRegister
                 Enum.Parse<CategoryOptions>(src.Category, true),
                 src.UnitPrice,
                 src.QuantityInStock));
+
+        config.NewConfig<Dictionary<Guid, bool>, List<ProductExistResponse>>()
+            .MapWith(src => src
+                .Select(kvp => new ProductExistResponse(kvp.Key, kvp.Value))
+                .ToList()
+            )
+            .GenerateMapper(MapType.Map);
     }
 }

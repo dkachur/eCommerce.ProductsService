@@ -46,6 +46,20 @@ public class ProductsService : IProductsService
         return Result.Ok(addedProduct.AdaptToProductDto());
     }
 
+    public async Task<Result<Dictionary<Guid, bool>>> CheckProductsExistAsync(IEnumerable<Guid> productIds)
+    {
+        var distinctIds = productIds.Distinct();
+
+        var existingIds = await _repo.GetExistingProductIdsAsync(distinctIds);
+        var existingSet = existingIds.ToHashSet();
+
+        var idExistingInfo = distinctIds.ToDictionary(
+            pId => pId,
+            pId => existingSet.Contains(pId));
+
+        return Result.Ok(idExistingInfo);
+    }
+
     public async Task<Result> DeleteProductAsync(Guid id)
     {
         bool deleted = await _repo.DeleteProductAsync(id);

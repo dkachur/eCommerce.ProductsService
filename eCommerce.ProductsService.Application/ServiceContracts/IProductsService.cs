@@ -38,6 +38,17 @@ public interface IProductsService
     Task<Result<ProductDto>> GetByIdAsync(Guid productId);
 
     /// <summary>
+    /// Checks which of the specified product IDs exist in the storage.
+    /// </summary>
+    /// <param name="productIds">A collection of product IDs to check.</param>
+    /// <returns>
+    /// A result containing a dictionary where each key is a product ID 
+    /// from <paramref name="productIds"/> and the value is <c>true</c> if the product exists,
+    /// or <c>false</c> if it does not.
+    /// </returns>
+    Task<Result<Dictionary<Guid, bool>>> CheckProductsExistAsync(IEnumerable<Guid> productIds);
+
+    /// <summary>
     /// Adds product.
     /// </summary>
     /// <param name="product">The product to add.</param>

@@ -18,6 +18,9 @@ public static class FluentResultExtensions
         if (fluentResult.Value is List<ProductDto> dtos)
             return successFactory(dtos.AdaptToProductResponseList());
 
+        if (fluentResult.Value is Dictionary<Guid, bool> idExistingInfo)
+            return successFactory(idExistingInfo.AdaptToProductExistResponseList());
+
         return successFactory(fluentResult.Value);
     }
 

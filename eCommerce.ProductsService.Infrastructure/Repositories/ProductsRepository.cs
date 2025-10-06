@@ -61,6 +61,18 @@ public class ProductsRepository : IProductsRepository
         return products;
     }
 
+    public async Task<IEnumerable<Guid>> GetExistingProductIdsAsync(IEnumerable<Guid> ids)
+    {
+        string query = """
+            SELECT id
+            FROM products
+            WHERE id IN @Ids
+            """;
+
+        var existingIds = await _dbContext.DbConnection.QueryAsync<Guid>(query, new { Ids = ids });
+        return existingIds;
+    }
+
     public async Task<IEnumerable<Product>> GetProductsAsync()
     {
         string query = """

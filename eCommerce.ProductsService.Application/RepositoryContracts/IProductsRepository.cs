@@ -37,6 +37,15 @@ public interface IProductsRepository
     Task<IEnumerable<Product>> GetBySearchStringAsync(string searchString);
 
     /// <summary>
+    /// Retrieves product ID for each ID from <paramref name="ids"/> if it exists.
+    /// </summary>
+    /// <param name="ids">The product unique identifiers.</param>
+    /// <returns>
+    /// A collection of <see cref="Guid"/> with product IDs which exist.
+    /// </returns>
+    Task<IEnumerable<Guid>> GetExistingProductIdsAsync(IEnumerable<Guid> ids);
+
+    /// <summary>
     /// Adds product to the storage.
     /// </summary>
     /// <param name="product">The product to add.</param>
