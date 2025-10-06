@@ -27,6 +27,16 @@ public interface IProductsRepository
     Task<Product?> GetByIdAsync(Guid id);
 
     /// <summary>
+    /// Retrieves products with the specified IDs from the storage.
+    /// </summary>
+    /// <param name="ids">The collection of product IDs.</param>
+    /// <returns>
+    /// A collection of <see cref="Product"/> corresponding to the specified IDs.
+    /// If none of the IDs exist, an empty collection is returned.
+    /// </returns>
+    Task<IEnumerable<Product>> GetProductsByIdsAsync(IEnumerable<Guid> ids);
+
+    /// <summary>
     /// Retrieves all products whose <c>Name</c> or <c>Category</c> contains the specified <paramref name="searchString"/>.
     /// </summary>
     /// <param name="searchString">The string value to search for.</param>

@@ -66,7 +66,7 @@ public class ProductsRepository : IProductsRepository
         string query = """
             SELECT id
             FROM products
-            WHERE id IN @Ids
+            WHERE id IN @Ids;
             """;
 
         var existingIds = await _dbContext.DbConnection.QueryAsync<Guid>(query, new { Ids = ids });
@@ -81,6 +81,18 @@ public class ProductsRepository : IProductsRepository
             """;
 
         var products = await _dbContext.DbConnection.QueryAsync<Product>(query);
+        return products;
+    }
+
+    public async Task<IEnumerable<Product>> GetProductsByIdsAsync(IEnumerable<Guid> ids)
+    {
+        string query = """
+            SELECT id, name, category, unit_price, quantity_in_stock
+            FROM products
+            WHERE id IN @Ids;
+            """;
+
+        var products = await _dbContext.DbConnection.QueryAsync<Product>(query, new { Ids = ids });
         return products;
     }
 

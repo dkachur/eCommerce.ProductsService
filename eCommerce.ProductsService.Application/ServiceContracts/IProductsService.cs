@@ -38,6 +38,17 @@ public interface IProductsService
     Task<Result<ProductDto>> GetByIdAsync(Guid productId);
 
     /// <summary>
+    /// Retrieves products by their IDs.
+    /// </summary>
+    /// <param name="productIds">The collection of product IDs.</param>
+    /// <returns>
+    /// A result containing a list of <see cref="ProductDto"/> corresponding to the specified IDs;
+    /// otherwise, a result containing an error.
+    /// </returns>
+    Task<Result<List<ProductDto>>> GetProductsByIdsAsync(IEnumerable<Guid> productIds);
+
+
+    /// <summary>
     /// Checks which of the specified product IDs exist in the storage.
     /// </summary>
     /// <param name="productIds">A collection of product IDs to check.</param>

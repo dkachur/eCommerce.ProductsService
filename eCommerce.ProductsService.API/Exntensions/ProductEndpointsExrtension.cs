@@ -100,10 +100,28 @@ public static class ProductEndpointsExrtension
                 IProductsService service,
                 ILogger<Program> logger) =>
             {
+                logger.LogInformation("Proessing POST exists request for {ids}", productIds);
+
                 var result = await service.CheckProductsExistAsync(productIds);
                 return result.ToOkApiResult();
             })
             .WithSummary("Checks which of the specified product IDs exist.")
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status500InternalServerError);
+
+
+        group.MapPost("/by-ids",
+            async (
+                [FromBody] IEnumerable<Guid> productIds,
+                IProductsService service,
+                ILogger<Program> logger) =>
+            {
+                logger.LogInformation("Proessing POST search by product IDs request for {ids}", productIds);
+
+                var result = await service.GetProductsByIdsAsync(productIds);
+                return result.ToOkApiResult();
+            })
+            .WithSummary("Retrieves product with specified IDs.")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 

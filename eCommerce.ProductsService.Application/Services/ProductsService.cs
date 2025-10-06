@@ -101,6 +101,13 @@ public class ProductsService : IProductsService
         return Result.Ok(products.AdaptToProductDtoList());
     }
 
+    public async Task<Result<List<ProductDto>>> GetProductsByIdsAsync(IEnumerable<Guid> productIds)
+    {
+        IEnumerable<Product> products = await _repo.GetProductsByIdsAsync(productIds);
+
+        return Result.Ok(products.AdaptToProductDtoList());
+    }
+
     public async Task<Result<ProductDto>> UpdateProductAsync(UpdateProductDto product)
     {
         var validationResult = await _updateProductValidator.ValidateAsync(product);
