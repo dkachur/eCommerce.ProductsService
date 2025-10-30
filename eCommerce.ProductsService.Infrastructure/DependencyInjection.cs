@@ -1,5 +1,11 @@
-﻿using eCommerce.ProductsService.Application.RepositoryContracts;
+﻿using eCommerce.ProductsService.Application.Messaging;
+using eCommerce.ProductsService.Application.RepositoryContracts;
 using eCommerce.ProductsService.Infrastructure.DbContext;
+using eCommerce.ProductsService.Infrastructure.Messaging.ConnectionManagers;
+using eCommerce.ProductsService.Infrastructure.Messaging.HostedServices;
+using eCommerce.ProductsService.Infrastructure.Messaging.Interfaces;
+using eCommerce.ProductsService.Infrastructure.Messaging.Options;
+using eCommerce.ProductsService.Infrastructure.Messaging.Publishers;
 using eCommerce.ProductsService.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +19,15 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         services.AddScoped<IProductsRepository, ProductsRepository>();
-        
+
+        services.AddMySQL(config);
+        services.AddRabbitMQ(config);
+
+        return services;
+    }
+
+    private static IServiceCollection AddMySQL(this IServiceCollection services, IConfiguration config)
+    {
         string connectionStringTemplate = config.GetConnectionString("Default")!;
         string connectionString = connectionStringTemplate
             .Replace("${MYSQL_HOST}", config["MYSQL_HOST"])
@@ -28,6 +42,35 @@ public static class DependencyInjection
         services.AddTransient<DapperDbContext>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+        return services;
+    }
+
+    private static IServiceCollection AddRabbitMQ(this IServiceCollection services, IConfiguration config)
+    {
+        var rabbitOptions = new RabbitMqOptions
+        {
+            Host = config["RABBITMQ_HOST"] ?? throw new InvalidOperationException("Missing env: RABBITMQ_HOST"),
+            Port = int.TryParse(config["RABBITMQ_PORT"], out var port) ? port : 5672,
+            Username = config["RABBITMQ_USER"] ?? "guest",
+            Password = config["RABBITMQ_PASS"] ?? "guest",
+            Exchange = config["RABBITMQ_PRODUCTS_EXCHANGE"] ?? "products.exchange"
+        };
+
+        services.Configure<RabbitMqOptions>(opt =>
+        {
+            opt.Host = rabbitOptions.Host;
+            opt.Port = rabbitOptions.Port;
+            opt.Username = rabbitOptions.Username;
+            opt.Password = rabbitOptions.Password;
+            opt.Exchange = rabbitOptions.Exchange;
+        });
+
+        services.AddSingleton<IRabbitMqConnectionManager, RabbitMqConnectionManager>();
+
+        services.AddHostedService<RabbitMqConnectionHostedService>();
+
+        services.AddSingleton<IMessagePublisher, RabbitMQPublisher>();
 
         return services;
     }

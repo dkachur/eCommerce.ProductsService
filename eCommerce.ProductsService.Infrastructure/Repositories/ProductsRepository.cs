@@ -37,7 +37,7 @@ public class ProductsRepository : IProductsRepository
         return rowsAffected > 0;
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id)
+    public async Task<Product?> GetProductByIdAsync(Guid id)
     {
         string query = """
             SELECT id, name, category, unit_price, quantity_in_stock 
@@ -100,7 +100,10 @@ public class ProductsRepository : IProductsRepository
     {
         string query = """
             UPDATE products
-            SET name = @Name, category = @Category, unit_price = @UnitPrice, quantity_in_stock = @QuantityInStock
+            SET name = @Name, 
+                category = @Category, 
+                unit_price = @UnitPrice, 
+                quantity_in_stock = @QuantityInStock
             WHERE id = @Id;
             """;
 

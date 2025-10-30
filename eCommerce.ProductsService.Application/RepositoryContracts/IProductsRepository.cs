@@ -24,7 +24,7 @@ public interface IProductsRepository
     /// A <see cref="Product"/> with the specified ID if found;
     /// otherwise, <c>null</c>.
     /// </returns>
-    Task<Product?> GetByIdAsync(Guid id);
+    Task<Product?> GetProductByIdAsync(Guid id);
 
     /// <summary>
     /// Retrieves products with the specified IDs from the storage.
