@@ -54,7 +54,8 @@ public static class DependencyInjection
             Port = int.TryParse(config["RABBITMQ_PORT"], out var port) ? port : 5672,
             Username = config["RABBITMQ_USER"] ?? "guest",
             Password = config["RABBITMQ_PASS"] ?? "guest",
-            Exchange = config["RABBITMQ_PRODUCTS_EXCHANGE"] ?? "products.exchange"
+            ProductsExchange = config["RABBITMQ_PRODUCTS_EXCHANGE"] ?? "products.exchange",
+            ProductNameUpdatedRoutingKey = config["RABBITMQ_PRODUCT_NAME_UPDATED_ROUTING_KEY"] ?? "product.name.updated",
         };
 
         services.Configure<RabbitMqOptions>(opt =>
@@ -63,14 +64,16 @@ public static class DependencyInjection
             opt.Port = rabbitOptions.Port;
             opt.Username = rabbitOptions.Username;
             opt.Password = rabbitOptions.Password;
-            opt.Exchange = rabbitOptions.Exchange;
+            opt.ProductsExchange = rabbitOptions.ProductsExchange;
+            opt.ProductNameUpdatedRoutingKey = rabbitOptions.ProductNameUpdatedRoutingKey;
         });
 
         services.AddSingleton<IRabbitMqConnectionManager, RabbitMqConnectionManager>();
 
         services.AddHostedService<RabbitMqConnectionHostedService>();
 
-        services.AddSingleton<IMessagePublisher, RabbitMQPublisher>();
+        services.AddSingleton<RabbitMqPublisher>();
+        services.AddSingleton<IMessagePublisher<ProductNameUpdatedMessage>, ProductNameUpdatedPublisher>();
 
         return services;
     }

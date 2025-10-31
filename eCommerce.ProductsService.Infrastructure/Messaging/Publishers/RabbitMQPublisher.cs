@@ -1,5 +1,4 @@
-﻿using eCommerce.ProductsService.Application.Messaging;
-using eCommerce.ProductsService.Infrastructure.Messaging.Interfaces;
+﻿using eCommerce.ProductsService.Infrastructure.Messaging.Interfaces;
 using eCommerce.ProductsService.Infrastructure.Messaging.Options;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -7,22 +6,28 @@ using System.Text.Json;
 
 namespace eCommerce.ProductsService.Infrastructure.Messaging.Publishers;
 
-public class RabbitMQPublisher : IMessagePublisher, IAsyncDisposable
+public class RabbitMqPublisher : IAsyncDisposable
 {
-    private readonly IRabbitMqConnectionManager _connectionManager;
     private IChannel? _channel;
     private bool _disposed;
     private readonly string _exchange;
+    private readonly IRabbitMqConnectionManager _connectionManager;
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true
+    };
 
-    public RabbitMQPublisher(IRabbitMqConnectionManager connectionManager, IOptions<RabbitMqOptions> options)
+
+    public RabbitMqPublisher(IRabbitMqConnectionManager connectionManager, IOptions<RabbitMqOptions> options)
     {
         _connectionManager = connectionManager;
-        _exchange = options.Value.Exchange;
+        _exchange = options.Value.ProductsExchange;
     }
 
     public async Task PublishAsync<T>(T message, string routingKey, CancellationToken ct = default)
     {
-        var body = JsonSerializer.SerializeToUtf8Bytes(message);
+        var body = JsonSerializer.SerializeToUtf8Bytes(message, JsonOptions);
         var channel = await GetOrCreateChannelAsync(ct);
 
         await channel.BasicPublishAsync(

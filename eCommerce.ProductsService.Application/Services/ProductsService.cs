@@ -17,21 +17,20 @@ public class ProductsService : IProductsService
     private readonly IValidator<AddProductDto> _addProductValidator;
     private readonly IValidator<UpdateProductDto> _updateProductValidator;
     private readonly ILogger<ProductsService> _logger;
-    private readonly IMessagePublisher _messagePublisher;
-    private const string UpdateNameRoutingKey = "product.update.name";
-
+    private readonly IMessagePublisher<ProductNameUpdatedMessage> _productNamePublisher;
+    
     public ProductsService(
         IProductsRepository repo,
         IValidator<AddProductDto> addProductValidator,
         IValidator<UpdateProductDto> updateProductValidator,
         ILogger<ProductsService> logger,
-        IMessagePublisher messagePublisher)
+        IMessagePublisher<ProductNameUpdatedMessage> productNamePublisher,
     {
         _repo = repo;
         _addProductValidator = addProductValidator;
         _updateProductValidator = updateProductValidator;
         _logger = logger;
-        _messagePublisher = messagePublisher;
+        _productNamePublisher = productNamePublisher;
     }
 
     public async Task<Result<ProductDto>> AddProductAsync(AddProductDto product)
@@ -136,8 +135,8 @@ public class ProductsService : IProductsService
         var isNameChanged = existingProduct.Name != updatedProduct.Name;
         if (isNameChanged)
         {
-            var message = new ProductNameUpdateMessage(updatedProduct.Id, updatedProduct.Name);
-            await _messagePublisher.PublishAsync(message, UpdateNameRoutingKey);
+            var message = new ProductNameUpdatedMessage(updatedProduct.Id, updatedProduct.Name);
+            await _productNamePublisher.PublishAsync(message);
         }
 
         _logger.LogInformation("Product with ID {ProductId} successfully updated", product.Id);
