@@ -18,19 +18,22 @@ public class ProductsService : IProductsService
     private readonly IValidator<UpdateProductDto> _updateProductValidator;
     private readonly ILogger<ProductsService> _logger;
     private readonly IMessagePublisher<ProductNameUpdatedMessage> _productNamePublisher;
-    
+    private readonly IMessagePublisher<ProductDeletedMessage> _productDeletePublisher;
+
     public ProductsService(
         IProductsRepository repo,
         IValidator<AddProductDto> addProductValidator,
         IValidator<UpdateProductDto> updateProductValidator,
         ILogger<ProductsService> logger,
         IMessagePublisher<ProductNameUpdatedMessage> productNamePublisher,
+        IMessagePublisher<ProductDeletedMessage> productDeletePublisher)
     {
         _repo = repo;
         _addProductValidator = addProductValidator;
         _updateProductValidator = updateProductValidator;
         _logger = logger;
         _productNamePublisher = productNamePublisher;
+        _productDeletePublisher = productDeletePublisher;
     }
 
     public async Task<Result<ProductDto>> AddProductAsync(AddProductDto product)
@@ -74,6 +77,7 @@ public class ProductsService : IProductsService
         }
 
         _logger.LogInformation("Product with ID {ProductId} successfully deleted", id);
+        await _productDeletePublisher.PublishAsync(new(id));
         return Result.Ok();
     }
 
@@ -84,14 +88,14 @@ public class ProductsService : IProductsService
         {
             _logger.LogWarning("Product with ID {ProductId} not found", productId);
             return Result.Fail<ProductDto>(ProductNotFoundError.WithId(productId));
-        }    
+        }
 
         return Result.Ok(product.AdaptToProductDto());
     }
 
     public async Task<Result<List<ProductDto>>> GetBySearchStringAsync(string searchString)
     {
-        var products = string.IsNullOrWhiteSpace(searchString) 
+        var products = string.IsNullOrWhiteSpace(searchString)
             ? await _repo.GetProductsAsync()
             : await _repo.GetBySearchStringAsync(searchString);
 
@@ -101,7 +105,7 @@ public class ProductsService : IProductsService
     public async Task<Result<List<ProductDto>>> GetProductsAsync()
     {
         IEnumerable<Product> products = await _repo.GetProductsAsync();
-        
+
         return Result.Ok(products.AdaptToProductDtoList());
     }
 
