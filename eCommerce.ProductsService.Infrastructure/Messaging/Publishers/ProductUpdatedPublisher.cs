@@ -4,18 +4,18 @@ using Microsoft.Extensions.Options;
 
 namespace eCommerce.ProductsService.Infrastructure.Messaging.Publishers;
 
-public class ProductNameUpdatedPublisher : IMessagePublisher<ProductNameUpdatedMessage>
+public class ProductUpdatedPublisher : IMessagePublisher<ProductUpdatedMessage>
 {
     private readonly RabbitMqPublisher _publisher;
     private readonly string _routingKey;
 
-    public ProductNameUpdatedPublisher(RabbitMqPublisher publisher, IOptions<RabbitMqOptions> options)
+    public ProductUpdatedPublisher(RabbitMqPublisher publisher, IOptions<RabbitMqOptions> options)
     {
         _publisher = publisher;
-        _routingKey = options.Value.ProductNameUpdatedRoutingKey;
+        _routingKey = options.Value.ProductUpdatedRoutingKey;
     }
 
-    public async Task PublishAsync(ProductNameUpdatedMessage message, CancellationToken ct = default)
+    public async Task PublishAsync(ProductUpdatedMessage message, CancellationToken ct = default)
     {
         await _publisher.PublishAsync(message, _routingKey, ct);
     }

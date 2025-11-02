@@ -1,4 +1,5 @@
 ﻿using eCommerce.ProductsService.Application.DTOs;
+using eCommerce.ProductsService.Application.Enums;
 using eCommerce.ProductsService.Application.Errors;
 using eCommerce.ProductsService.Application.Exntensions;
 using eCommerce.ProductsService.Application.Messaging;
@@ -17,23 +18,23 @@ public class ProductsService : IProductsService
     private readonly IValidator<AddProductDto> _addProductValidator;
     private readonly IValidator<UpdateProductDto> _updateProductValidator;
     private readonly ILogger<ProductsService> _logger;
-    private readonly IMessagePublisher<ProductNameUpdatedMessage> _productNamePublisher;
-    private readonly IMessagePublisher<ProductDeletedMessage> _productDeletePublisher;
+    private readonly IMessagePublisher<ProductUpdatedMessage> _productUpdatedPublisher;
+    private readonly IMessagePublisher<ProductDeletedMessage> _productDeletedPublisher;
 
     public ProductsService(
         IProductsRepository repo,
         IValidator<AddProductDto> addProductValidator,
         IValidator<UpdateProductDto> updateProductValidator,
         ILogger<ProductsService> logger,
-        IMessagePublisher<ProductNameUpdatedMessage> productNamePublisher,
+        IMessagePublisher<ProductUpdatedMessage> productNamePublisher,
         IMessagePublisher<ProductDeletedMessage> productDeletePublisher)
     {
         _repo = repo;
         _addProductValidator = addProductValidator;
         _updateProductValidator = updateProductValidator;
         _logger = logger;
-        _productNamePublisher = productNamePublisher;
-        _productDeletePublisher = productDeletePublisher;
+        _productUpdatedPublisher = productNamePublisher;
+        _productDeletedPublisher = productDeletePublisher;
     }
 
     public async Task<Result<ProductDto>> AddProductAsync(AddProductDto product)
@@ -77,7 +78,7 @@ public class ProductsService : IProductsService
         }
 
         _logger.LogInformation("Product with ID {ProductId} successfully deleted", id);
-        await _productDeletePublisher.PublishAsync(new(id));
+        await _productDeletedPublisher.PublishAsync(new(id));
         return Result.Ok();
     }
 
@@ -136,13 +137,9 @@ public class ProductsService : IProductsService
             return Result.Fail<ProductDto>(new PersistenceError($"Product with ID {product.Id} was not updated."));
         }
 
-        var isNameChanged = existingProduct.Name != updatedProduct.Name;
-        if (isNameChanged)
-        {
-            var message = new ProductNameUpdatedMessage(updatedProduct.Id, updatedProduct.Name);
-            await _productNamePublisher.PublishAsync(message);
-        }
-
+        var message = updatedProduct.AdaptToProductUpdatedMessage();
+        await _productUpdatedPublisher.PublishAsync(message);
+        
         _logger.LogInformation("Product with ID {ProductId} successfully updated", product.Id);
         return Result.Ok(updatedProduct.AdaptToProductDto());
     }

@@ -55,7 +55,7 @@ public static class DependencyInjection
             Username = config["RABBITMQ_USER"] ?? "guest",
             Password = config["RABBITMQ_PASS"] ?? "guest",
             ProductsExchange = config["RABBITMQ_PRODUCTS_EXCHANGE"] ?? "products.exchange",
-            ProductNameUpdatedRoutingKey = config["RABBITMQ_PRODUCT_NAME_UPDATED_ROUTING_KEY"] ?? "product.name.updated",
+            ProductUpdatedRoutingKey = config["RABBITMQ_PRODUCT_UPDATED_ROUTING_KEY"] ?? "product.updated",
             ProductDeletedRoutingKey = config["RABBITMQ_PRODUCT_DELETED_ROUTING_KEY"] ?? "product.deleted"
         };
 
@@ -66,7 +66,7 @@ public static class DependencyInjection
             opt.Username = rabbitOptions.Username;
             opt.Password = rabbitOptions.Password;
             opt.ProductsExchange = rabbitOptions.ProductsExchange;
-            opt.ProductNameUpdatedRoutingKey = rabbitOptions.ProductNameUpdatedRoutingKey;
+            opt.ProductUpdatedRoutingKey = rabbitOptions.ProductUpdatedRoutingKey;
             opt.ProductDeletedRoutingKey = rabbitOptions.ProductDeletedRoutingKey;
         });
 
@@ -75,7 +75,7 @@ public static class DependencyInjection
         services.AddHostedService<RabbitMqConnectionHostedService>();
 
         services.AddSingleton<RabbitMqPublisher>();
-        services.AddSingleton<IMessagePublisher<ProductNameUpdatedMessage>, ProductNameUpdatedPublisher>();
+        services.AddSingleton<IMessagePublisher<ProductUpdatedMessage>, ProductUpdatedPublisher>();
         services.AddSingleton<IMessagePublisher<ProductDeletedMessage>, ProductDeletedPublisher>();
 
         return services;
