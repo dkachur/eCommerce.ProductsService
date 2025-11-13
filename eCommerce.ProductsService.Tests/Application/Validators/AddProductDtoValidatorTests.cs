@@ -14,6 +14,25 @@ public class AddProductDtoValidatorTests
     private readonly Faker _faker;
     private readonly Fixture _fixture;
 
+    public static TheoryData<string, CategoryOptions, double, int, string[]> InvalidProductData =>
+        new()
+        {
+            { "", CategoryOptions.Electronics, 100, 10, [nameof(AddProductDto.Name)] },                                     // Empty name
+            { "   ", CategoryOptions.Electronics, 100, 10, [nameof(AddProductDto.Name)] },                                  // Whitespace name
+            { new string('A', 51), CategoryOptions.Electronics, 100, 10, [nameof(AddProductDto.Name)] },                    // Long name
+            { "Bluetooth Headphones", CategoryOptions.Electronics, 0, 10, [nameof(AddProductDto.UnitPrice)] },              // Zero price
+            { "Bluetooth Headphones", CategoryOptions.Electronics, 100000, 10, [nameof(AddProductDto.UnitPrice)] },         // High price
+            { "Bluetooth Headphones", CategoryOptions.Electronics, 100, -1, [nameof(AddProductDto.QuantityInStock)] },      // Negative quantity
+            { "Bluetooth Headphones", CategoryOptions.Electronics, 100, 1000, [nameof(AddProductDto.QuantityInStock)] },    // High quantity
+
+            { "", CategoryOptions.Electronics, -10, -10,                                                                    //
+            [                                                                                                               //
+                nameof(AddProductDto.Name),                                                                                 // Name, price and quantity are invalid
+                nameof(AddProductDto.UnitPrice),                                                                            //
+                nameof(AddProductDto.QuantityInStock),                                                                      //
+            ] },                                                                                                            //
+        };
+
     public AddProductDtoValidatorTests()
     {
         _faker = new Faker();
@@ -22,13 +41,7 @@ public class AddProductDtoValidatorTests
     }
 
     [Theory(DisplayName = "ValidateAsync should return validation errors with property name when input is invalid")]
-    [InlineData("", CategoryOptions.Electronics, 100, 10, nameof(AddProductDto.Name))]                                      // Empty name
-    [InlineData("    ", CategoryOptions.Electronics, 100, 10, nameof(AddProductDto.Name))]                                  // Whitespace name
-    [InlineData("Bluetooth Headphones", CategoryOptions.Electronics, 0, 10, nameof(AddProductDto.UnitPrice))]               // Zero price
-    [InlineData("Bluetooth Headphones", CategoryOptions.Electronics, 100000, 10, nameof(AddProductDto.UnitPrice))]          // High price
-    [InlineData("Bluetooth Headphones", CategoryOptions.Electronics, 100, -1, nameof(AddProductDto.QuantityInStock))]       // Negative quantity
-    [InlineData("Bluetooth Headphones", CategoryOptions.Electronics, 100, 1000, nameof(AddProductDto.QuantityInStock))]     // High quantity
-    [InlineData("", CategoryOptions.Electronics, -10, -10, nameof(AddProductDto.Name), nameof(AddProductDto.UnitPrice), nameof(AddProductDto.QuantityInStock))]     // Name, price and quantity are invalid
+    [MemberData(nameof(InvalidProductData))]
     public async Task ValidateAsync_ShouldFailWithError_WhenInvalidData(string name, CategoryOptions category, double price, int quantity, params string[] invalidPropertyNames)
     {
         // Arrange
