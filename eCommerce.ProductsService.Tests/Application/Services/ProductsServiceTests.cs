@@ -2,12 +2,9 @@
 using Bogus;
 using eCommerce.ProductsService.Application.DTOs;
 using eCommerce.ProductsService.Application.Enums;
-using eCommerce.ProductsService.Application.Errors;
 using eCommerce.ProductsService.Application.Messaging;
 using eCommerce.ProductsService.Application.RepositoryContracts;
 using eCommerce.ProductsService.Domain.Entities;
-using FluentAssertions;
-using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -30,14 +27,6 @@ public partial class ProductsServiceTests
 
     private readonly Fixture _fixture;
     private readonly Faker _faker;
-
-    //private const int ValidProductNameLength = 10;
-    //private const double ValidUnitPrice = 99.99d;
-    //private const int ValidQuantityInStock = 10;
-
-    //private const int InvalidProductNameLength = 51;
-    //private const double InvalidUnitPrice = 100000d;
-    //private const int InvalidQuantityInStock = 1000;
 
     private const int ValidProductListCount = 10;
     private const int ProductFromSearchCount = 4;
