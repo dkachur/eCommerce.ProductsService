@@ -6,7 +6,7 @@ namespace eCommerce.ProductsService.Tests.Integration.Infrastructure.Repositorie
 
 public partial class ProductsRepositoryTests
 {
-    public static TheoryData<string[], string[]> GetExistingProductIdsTestData => CreateTestData();
+    public static TheoryData<string[], string[]> GetExistingProductIdsTestData => CreateIdsSelectionTestData();
 
     [Theory(DisplayName = "GetExistingProductIdsAsync should return only existing IDs from requested IDs")]
     [MemberData(nameof(GetExistingProductIdsTestData))]
@@ -46,7 +46,7 @@ public partial class ProductsRepositoryTests
             _faker.Random.Double(1, 100),
             _faker.Random.Int(0, 100));
 
-    private static TheoryData<string[], string[]> CreateTestData()
+    private static TheoryData<string[], string[]> CreateIdsSelectionTestData()
     {
         var existingIds = GenerateGuidsAsString(6);
         return new TheoryData<string[], string[]>
