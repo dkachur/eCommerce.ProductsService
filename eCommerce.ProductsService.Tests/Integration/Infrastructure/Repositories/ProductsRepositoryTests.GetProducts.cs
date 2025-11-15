@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using eCommerce.ProductsService.Application.Enums;
 using eCommerce.ProductsService.Domain.Entities;
 using FluentAssertions;
 
