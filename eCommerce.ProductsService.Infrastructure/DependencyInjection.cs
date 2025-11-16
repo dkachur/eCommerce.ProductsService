@@ -74,7 +74,7 @@ public static class DependencyInjection
 
         services.AddHostedService<RabbitMqConnectionHostedService>();
 
-        services.AddSingleton<RabbitMqPublisher>();
+        services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
         services.AddSingleton<IMessagePublisher<ProductUpdatedMessage>, ProductUpdatedPublisher>();
         services.AddSingleton<IMessagePublisher<ProductDeletedMessage>, ProductDeletedPublisher>();
 

@@ -1,4 +1,5 @@
 ﻿using eCommerce.ProductsService.Application.Messaging;
+using eCommerce.ProductsService.Infrastructure.Messaging.Interfaces;
 using eCommerce.ProductsService.Infrastructure.Messaging.Options;
 using Microsoft.Extensions.Options;
 
@@ -6,10 +7,10 @@ namespace eCommerce.ProductsService.Infrastructure.Messaging.Publishers;
 
 public class ProductUpdatedPublisher : IMessagePublisher<ProductUpdatedMessage>
 {
-    private readonly RabbitMqPublisher _publisher;
+    private readonly IRabbitMqPublisher _publisher;
     private readonly string _routingKey;
 
-    public ProductUpdatedPublisher(RabbitMqPublisher publisher, IOptions<RabbitMqOptions> options)
+    public ProductUpdatedPublisher(IRabbitMqPublisher publisher, IOptions<RabbitMqOptions> options)
     {
         _publisher = publisher;
         _routingKey = options.Value.ProductUpdatedRoutingKey;

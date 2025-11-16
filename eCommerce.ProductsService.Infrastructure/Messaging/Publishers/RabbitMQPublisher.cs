@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace eCommerce.ProductsService.Infrastructure.Messaging.Publishers;
 
-public class RabbitMqPublisher : IAsyncDisposable
+public class RabbitMqPublisher : IRabbitMqPublisher
 {
     private IChannel? _channel;
     private bool _disposed;
