@@ -5,6 +5,7 @@ using eCommerce.ProductsService.Application.Enums;
 using eCommerce.ProductsService.Application.Messaging;
 using eCommerce.ProductsService.Application.RepositoryContracts;
 using eCommerce.ProductsService.Domain.Entities;
+using eCommerce.ProductsService.Tests.Helpers;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -67,11 +68,11 @@ public partial class ProductsServiceTests
 
         _repoMock
             .Setup(r => r.GetProductByIdAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(CreateValidProduct());
+            .ReturnsAsync(ProductFactory.CreateRandom());
 
         _validProducts = Enumerable
             .Range(0, ValidProductListCount)
-            .Select(_ => CreateValidProduct())
+            .Select(_ => ProductFactory.CreateRandom())
             .ToList();
 
         _repoMock
@@ -80,7 +81,7 @@ public partial class ProductsServiceTests
 
         _productsFromSearch = Enumerable
             .Range(0, ProductFromSearchCount)
-            .Select(_ => CreateValidProduct())
+            .Select(_ => ProductFactory.CreateRandom())
             .ToList();
 
         _repoMock
@@ -89,7 +90,7 @@ public partial class ProductsServiceTests
 
         _productsByIds = Enumerable
             .Range(0, ProductsByIdsCount)
-            .Select(_ => CreateValidProduct())
+            .Select(_ => ProductFactory.CreateRandom())
             .ToList();
 
         _repoMock
@@ -126,14 +127,6 @@ public partial class ProductsServiceTests
             .Setup(v => v.ValidateAsync(It.IsAny<TDto>(), default))
             .ReturnsAsync(new ValidationResult([validationFailure]));
     }
-
-    private Product CreateValidProduct()
-        => Product.Restore(
-            id: Guid.NewGuid(),
-            name: _faker.Commerce.ProductName(),
-            category: _faker.Random.Enum<CategoryOptions>().ToString(),
-            unitPrice: _faker.Random.Double(1, 99999),
-            quantityInStock: _faker.Random.Int(0, 999));
 
     #endregion
 }
