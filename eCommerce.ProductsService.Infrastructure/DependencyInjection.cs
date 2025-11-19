@@ -9,6 +9,7 @@ using eCommerce.ProductsService.Infrastructure.Messaging.Publishers;
 using eCommerce.ProductsService.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MySqlConnector;
 using System.Data;
 
@@ -16,13 +17,18 @@ namespace eCommerce.ProductsService.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config, IHostEnvironment env)
     {
         services.AddScoped<IProductsRepository, ProductsRepository>();
 
-        services.AddMySQL(config);
-        services.AddRabbitMQ(config);
+        if (!env.IsEnvironment("Testing"))
+        {
+            services.AddMySQL(config);
+            services.AddRabbitMQ(config);
+        }
 
+        services.AddDapper();
+        
         return services;
     }
 
@@ -39,8 +45,12 @@ public static class DependencyInjection
         services.AddScoped<IDbConnection>(_ =>
             new MySqlConnection(connectionString));
 
-        services.AddTransient<DapperDbContext>();
+        return services;
+    }
 
+    private static IServiceCollection AddDapper(this IServiceCollection services)
+    {
+        services.AddTransient<DapperDbContext>();
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
         return services;

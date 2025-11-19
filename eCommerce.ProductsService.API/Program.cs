@@ -6,7 +6,7 @@ using eCommerce.ProductsService.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Application and infrastructure serivces
-builder.Services.AddInfrastructure(builder.Configuration)
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication();
 
 // Add FluentValidation validatiors to services
@@ -44,3 +44,5 @@ app.UseAuthorization();
 app.MapProductEndpoints();
 
 app.Run();
+
+public partial class Program { }
