@@ -1,16 +1,17 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using System.Data;
 
-namespace eCommerce.ProductsService.Tests.Integration.Infrastructure.Common;
+namespace eCommerce.ProductsService.Tests.Integration.Common;
 
 public class TestDatabase : IDisposable
 {
-    public IDbConnection Connection { get; }
+    public SqliteConnection Connection { get; private set; }
+
+    public const string ConnectionString = "Data Source=file:memdb1?mode=memory&cache=shared";
 
     public TestDatabase()
     {
-        var connection = new SqliteConnection("Data source=:memory:");
+        var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
         Connection = connection;
@@ -20,11 +21,21 @@ public class TestDatabase : IDisposable
         CreateSchema();
     }
 
+    public async Task ClearDb()
+    {
+        if (Connection.State is not System.Data.ConnectionState.Open)
+            Connection.Open();
+
+        var cmd = Connection.CreateCommand();
+        cmd.CommandText = "DELETE FROM products;";
+        await cmd.ExecuteNonQueryAsync();
+    }
+
     private void CreateSchema()
     {
         var cmd = Connection.CreateCommand();
         cmd.CommandText = """
-            CREATE TABLE products (
+            CREATE TABLE IF NOT EXISTS products (
                 id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
                 category TEXT NOT NULL,
