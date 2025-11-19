@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using System.Data;
 
-namespace eCommerce.ProductsService.Tests.Integration.Infrastructure.Common;
+namespace eCommerce.ProductsService.Tests.Integration.Common;
 
 public class GuidTypeHandler : SqlMapper.TypeHandler<Guid>
 {
