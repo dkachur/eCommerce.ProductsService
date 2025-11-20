@@ -5,6 +5,7 @@ on:
     branches: 
       - main
       - dev
+      - test-gh-actions 
   pull_request:
     branches: 
       - main
@@ -41,10 +42,13 @@ jobs:
           /p:CoverletOutput=TestResults/coverage/coverage \
           --no-build --verbosity normal
 
+    - name: debug find coverage files
+      run: find . -name "coverage.xml"
+
     - name: Generate coverage report
       run: |
         reportgenerator \
-          -reports:TestResults/coverage/coverage.xml \
+          -reports:TestResults/coverage/coverage.cobertura.xml \
           -targetdir:coverage-report \
           -reporttypes:TextSummary
 
