@@ -1,4 +1,4 @@
-name: CI - Build & Test
+﻿name: CI - Build & Test
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - dev
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,35 @@ jobs:
       
     - name: Build solution
       run: dotnet build --no-restore --configuration Release
-      
-    - name: Run tests
-      run: dotnet test --no-build --configuration Release --verbosity normal
+
+    - name: Install ReportGenerator tool
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.*
+
+    - name: Run tests with coverage
+      run: |
+        dotnet test \
+          --configuration Release \
+          /p:CollectCoverage=true \
+          /p:CoverletOutputFormat=cobertura \
+          /p:CoverletOutput=TestResults/coverage/coverage.xml \
+          --no-build
+
+    - name: Generate coverage report
+      run: |
+        reportgenerator \
+          -reports:TestResults/coverage/coverage.xml \
+          -targetdir:coverage-report \
+          -reporttypes:TextSummary
+
+    - name: Show coverage in GitHub Summary
+      run: |
+        echo "### Code Coverage" >> $GITHUB_STEP_SUMMARY
+        cat coverage-report/Summary.txt >> $GITHUB_STEP_SUMMARY
+
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage-report
+
       
