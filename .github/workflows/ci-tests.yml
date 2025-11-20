@@ -17,6 +17,8 @@ on:
 
 jobs:
   test:
+    if: github.event_name == 'pull_request' || github.event.pusher.name != 'github-actions[bot]'
+
     runs-on: ubuntu-latest
 
     steps:
