@@ -20,7 +20,8 @@ builder.Services.AddAuthorization()
 builder.Services.AddJsonStringEnumConverter();
 
 // Configure Swagger
-builder.Services.AddSwaggerConfig();
+if (!builder.Environment.IsEnvironment("Testing"))
+    builder.Services.AddSwaggerConfig();
 
 // Configure CORS
 builder.Services.AddConfiguredCors();
@@ -35,9 +36,12 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+    
 app.UseAuthentication();
 app.UseAuthorization();
 
