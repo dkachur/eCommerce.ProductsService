@@ -38,13 +38,13 @@ jobs:
           --configuration Release \
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=cobertura \
-          /p:CoverletOutput=TestResults/coverage/coverage \
+          /p:CoverletOutput=$(pwd)/TestResults/coverage/ \
           --no-build --verbosity normal
 
     - name: Generate coverage report
       run: |
         reportgenerator \
-          -reports:TestResults/coverage/coverage.xml \
+          -reports:TestResults/coverage/coverage.cobertura.xml \
           -targetdir:coverage-report \
           -reporttypes:TextSummary
 
