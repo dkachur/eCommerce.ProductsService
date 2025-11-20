@@ -38,8 +38,8 @@ jobs:
           --configuration Release \
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=cobertura \
-          /p:CoverletOutput=TestResults/coverage/coverage.xml \
-          --no-build
+          /p:CoverletOutput=TestResults/coverage/coverage \
+          --no-build --verbosity normal
 
     - name: Generate coverage report
       run: |
