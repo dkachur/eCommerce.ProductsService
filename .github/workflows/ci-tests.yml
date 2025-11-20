@@ -39,18 +39,13 @@ jobs:
           --configuration Release \
           /p:CollectCoverage=true \
           /p:CoverletOutputFormat=cobertura \
-          /p:CoverletOutput=$(pwd)/TestResults/coverage/coverage.xml \
+          /p:CoverletOutput=./TestResults/coverage/ \
           --no-build --verbosity normal
-
-    - name: debug find coverage files
-      run: |
-        echo "Coverage files:"
-        find . -maxdepth 5 -type f -name "*coverage*" -o -name "*.xml"
 
     - name: Generate coverage report
       run: |
         reportgenerator \
-          -reports:TestResults/coverage/coverage.xml \
+          -reports:TestResults/coverage/coverage.cobertura.xml \
           -targetdir:coverage-report \
           -reporttypes:TextSummary
 
