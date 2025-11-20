@@ -13,11 +13,10 @@ on:
       - main
       - dev
       - test-run
+      - non-branch
 
 jobs:
   test:
-    if: github.event_name == 'pull_request' || github.event.pull_request == null
-
     runs-on: ubuntu-latest
 
     steps:
