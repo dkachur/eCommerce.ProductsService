@@ -5,13 +5,19 @@ on:
     branches: 
       - main
       - dev
+      - test-run 
+      - 'feature/*'
+      - 'fix/*'
   pull_request:
     branches: 
       - main
       - dev
+      - test-run
 
 jobs:
   test:
+    if: github.event_name == 'pull_request' || github.event.pull_request == null
+
     runs-on: ubuntu-latest
 
     steps:
