@@ -5,7 +5,18 @@ namespace eCommerce.ProductsService.Tests.Integration.Common;
 
 public class TestDatabase : IDisposable
 {
-    public SqliteConnection Connection { get; private set; }
+    private readonly SqliteConnection _connection;
+
+    public SqliteConnection Connection { 
+        get 
+        {
+            if (_connection.State == System.Data.ConnectionState.Open)
+                return _connection;
+
+            _connection.Open();
+            return _connection;
+        } 
+        private set { } }
 
     public const string ConnectionString = "Data Source=file:memdb1?mode=memory&cache=shared";
 
@@ -14,7 +25,7 @@ public class TestDatabase : IDisposable
         var connection = new SqliteConnection(ConnectionString);
         connection.Open();
 
-        Connection = connection;
+        _connection = connection;
 
         SqlMapper.AddTypeHandler(new GuidTypeHandler());
 
