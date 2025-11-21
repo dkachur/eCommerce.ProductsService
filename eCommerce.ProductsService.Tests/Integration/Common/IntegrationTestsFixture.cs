@@ -2,7 +2,7 @@
 
 namespace eCommerce.ProductsService.Tests.Integration.Common;
 
-[CollectionDefinition("IntegrationTests")]
+[CollectionDefinition("IntegrationTests", DisableParallelization = true)]
 public class IntegrationTestsCollection : ICollectionFixture<IntegrationTestsFixture>
 {
     
