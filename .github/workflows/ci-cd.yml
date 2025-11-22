@@ -134,6 +134,18 @@ jobs:
           kubectl get ns ${NS} || kubectl create ns ${NS}
           echo "KUBE_NAMESPACE=${NS}" >> $GITHUB_ENV
 
+      - name: Create Kubernetes secrets
+        run: |
+          kubectl -n ${KUBE_NAMESPACE} create secret generic mysql-secret \
+            --from-literal=MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n ${KUBE_NAMESPACE} create secret generic rabbitmq-secret \
+            --from-literal=RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl -n ${KUBE_NAMESPACE} create secret generic rabbitmq-secret \
+            --from-literal=RABBITMQ_USER=${{ secrets.RABBITMQ_USER }} \
+            --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy - update image in existing Deployment or create new Deployment
         run: |
           IMAGE_TAG=${{ github.ref_name }}-build-${{ github.run_number }}
