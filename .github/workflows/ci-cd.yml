@@ -141,8 +141,6 @@ jobs:
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl -n ${KUBE_NAMESPACE} create secret generic rabbitmq-secret \
             --from-literal=RABBITMQ_PASS=${{ secrets.RABBITMQ_PASS }} \
-            --dry-run=client -o yaml | kubectl apply -f -
-          kubectl -n ${KUBE_NAMESPACE} create secret generic rabbitmq-secret \
             --from-literal=RABBITMQ_USER=${{ secrets.RABBITMQ_USER }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
