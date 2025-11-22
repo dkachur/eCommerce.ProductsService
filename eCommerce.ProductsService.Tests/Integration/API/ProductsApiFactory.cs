@@ -3,6 +3,7 @@ using eCommerce.ProductsService.Infrastructure.Messaging.Interfaces;
 using eCommerce.ProductsService.Tests.Integration.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
@@ -12,14 +13,8 @@ namespace eCommerce.ProductsService.Tests.Integration.API;
 
 public class ProductsApiFactory : WebApplicationFactory<Program>
 {
-    private TestDatabase _db;
     private IMessagePublisher<ProductUpdatedMessage>? _updatedPublisher;
     private IMessagePublisher<ProductDeletedMessage>? _deletedPublisher;
-
-    public ProductsApiFactory(TestDatabase db)
-    {
-        _db = db;
-    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -31,7 +26,12 @@ public class ProductsApiFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             services.RemoveAll<IDbConnection>();
-            services.AddTransient<IDbConnection>(_ => _db.Connection);
+            services.AddTransient<IDbConnection>(_ =>
+            {
+                var conn = new SqliteConnection(TestDatabase.ConnectionString);
+                conn.Open();
+                return conn;
+            });
 
             services.RemoveAll<IRabbitMqConnectionManager>();
             services.RemoveAll<IRabbitMqPublisher>();

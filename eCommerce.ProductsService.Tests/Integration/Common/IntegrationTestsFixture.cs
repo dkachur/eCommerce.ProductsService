@@ -18,7 +18,7 @@ public class IntegrationTestsFixture : IAsyncLifetime
     {
         TestDatabase = new TestDatabase();
 
-        Factory = new ProductsApiFactory(TestDatabase);
+        Factory = new ProductsApiFactory();
         Client = Factory.CreateClient();
     }
 
