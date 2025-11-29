@@ -2,7 +2,7 @@
 
 namespace eCommerce.ProductsService.Tests.Integration.Common;
 
-[CollectionDefinition("IntegrationTests")]
+[CollectionDefinition("IntegrationTests", DisableParallelization = true)]
 public class IntegrationTestsCollection : ICollectionFixture<IntegrationTestsFixture>
 {
     
@@ -18,7 +18,7 @@ public class IntegrationTestsFixture : IAsyncLifetime
     {
         TestDatabase = new TestDatabase();
 
-        Factory = new ProductsApiFactory(TestDatabase);
+        Factory = new ProductsApiFactory();
         Client = Factory.CreateClient();
     }
 
